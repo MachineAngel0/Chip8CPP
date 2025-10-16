@@ -18,7 +18,7 @@ struct Descriptor {
 
 void create_descriptor_set_layout(Vulkan_Context& vulkan_context, Descriptor& descriptor);
 void create_descriptor_pool(Vulkan_Context& vulkan_context, Descriptor& descriptor);
-void create_descriptor_sets(Vulkan_Context& vulkan_context, Texture& texture, Uniform_Buffer_Context uniform_buffer_context, Descriptor& descriptor);
+void create_descriptor_sets(Vulkan_Context& vulkan_context, Texture& texture, Descriptor& descriptor);
 
 
 #endif //VK_DESCRIPTOR_H

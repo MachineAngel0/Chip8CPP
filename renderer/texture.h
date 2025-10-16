@@ -19,7 +19,8 @@ struct Texture
 
 /*TEXTURE IMAGE*/
 void create_texture_image_from_file(Vulkan_Context& vulkan_context, Command_Buffer_Context& command_buffer_context, Texture& texture, const char* filepath);
-void create_texture_image_pixels(Vulkan_Context& vulkan_context, Command_Buffer_Context& command_buffer_context, Texture& texture, unsigned char* pixels, int texWidth, int texHeight);
+void create_texture_image_pixels(Vulkan_Context& vulkan_context, Command_Buffer_Context& command_buffer_context, Texture& texture, VkFormat format, void const* pixels, int texWidth, int texHeight);
+void update_texture_image_pixels(Vulkan_Context& vulkan_context, Command_Buffer_Context& command_buffer_context, Texture& texture, VkFormat format, void const* pixels, int texWidth, int texHeight);
 
 
 void create_image(Vulkan_Context& vulkan_context, Texture& texture, uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties);

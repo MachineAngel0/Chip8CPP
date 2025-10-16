@@ -17,8 +17,12 @@ int main(int argc, char** argv)
 {
 
     CHIP8* chip8 = chip8_init();
-    // chip8_load_rom(chip8, argv[1]);
-    if (!chip8_load_rom(chip8, "../games/Tetris [Fran Dachille, 1991].ch8"))
+    // if (!chip8_load_rom(chip8, argv[1]))
+    // {
+       // throw std::runtime_error("ROM COULD NOT LOAD");
+    // };
+    if (!chip8_load_rom(chip8, "../games/Tic-Tac-Toe [David Winter].ch8"))
+    // if (!chip8_load_rom(chip8, "../games/test_opcode.ch8"))
     {
        throw std::runtime_error("ROM COULD NOT LOAD");
     };
@@ -32,7 +36,6 @@ int main(int argc, char** argv)
     Buffer_Context buffer_context{};
     Semaphore_Fences_Context semaphore_fences_context{};
     Descriptor descriptor_set{};
-    Uniform_Buffer_Context uniform_buffer_context{};
     Texture texture{};
 
     //set window size based on scale
@@ -47,40 +50,52 @@ int main(int argc, char** argv)
 
 
     init_vulkan(vulkan_context, window_info, swapchain_context, graphics_context, buffer_context,
-                command_buffer_context, semaphore_fences_context, texture, uniform_buffer_context, chip8->video, descriptor_set);
+                command_buffer_context, semaphore_fences_context, texture, chip8->video, descriptor_set);
     clock_windows_init();
 
-    add_quad_textured(glm::vec2{0.0f, 0.0f}, glm::vec3{1.0f,1.0f,1.0f}, 1.0, vertex_info);
+    // add_quad_textured(glm::vec2{0.0f, 0.0f}, 1.0, vertex_info);
+    add_full_screen_quad_textured(vertex_info);
 
-    float cycle_time = SECONDS(5);
+
+    float cycle_time = SECONDS(0.01f);
     float dt = 0.0f; // in ms
     float dt_accumulation = 0.0f; // in ms
 
     while (!glfwWindowShouldClose(window_info.window))
     {
+        glfwPollEvents();
+
         dt = clock_window_delta_time();
         dt_accumulation += dt;
         // get input
-        key_callback(window_info.window, chip8);
 
-        draw_frame(vulkan_context, window_info, swapchain_context,
-                             graphics_context, command_buffer_context,
-                             buffer_context, vertex_info, semaphore_fences_context, descriptor_set);
+        // draw_frame(vulkan_context, window_info, swapchain_context,
+                             // graphics_context, command_buffer_context,
+                             // buffer_context, vertex_info, semaphore_fences_context, descriptor_set);
 
-        // if (dt_accumulation > cycle_time)
-        // {
+        if (dt_accumulation > cycle_time)
+        {
+            key_callback(window_info.window, chip8);
+
             //reset the timer
-            // dt_accumulation -= cycle_time;
+            dt_accumulation -= cycle_time;
 
             //process emulator
-            // chip8_cycle(chip8);
+            chip8_cycle(chip8);
 
-            //TODO: render update
-            //grab the pixel data, send it to a shader basically
-            // draw_frame(vulkan_context, window_info, swapchain_context,
-            //            graphics_context, command_buffer_context,
-            //            buffer_context, vertex_info, semaphore_fences_context, descriptor_set);
-        // }
+
+            for (int i = 0; i < VIDEO_WIDTH*VIDEO_HEIGHT; i++) {
+                chip8->video[i] = chip8->video[i] ? 255 : 0;
+            }
+
+            update_texture_image_pixels(vulkan_context, command_buffer_context, texture, VK_FORMAT_R8_UNORM, chip8->video, VIDEO_WIDTH, VIDEO_HEIGHT);
+
+        }
+
+        //grab the pixel data, send it to a shader basically
+        draw_frame(vulkan_context, window_info, swapchain_context,
+        graphics_context, command_buffer_context,
+        buffer_context, vertex_info, semaphore_fences_context, descriptor_set);
     }
 
     printf("Hello, World!\n");

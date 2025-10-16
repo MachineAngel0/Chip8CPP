@@ -31,6 +31,12 @@ inline bool space_key_pressed = false;
 
 inline void key_callback(GLFWwindow* window, CHIP8* chip8)
 {
+    //here for testing
+    if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+    {
+        printf("test key pressed\n");
+    }
+
     if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
     {
         chip8->keypad[0] = 1;

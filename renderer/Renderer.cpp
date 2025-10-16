@@ -14,7 +14,7 @@
 #include "vk_device.h"
 #include "vk_renderpass.h"
 #include "vk_vertex.h"
-
+#include "../chip8.h"
 
 
 void init_vulkan(Vulkan_Context& vulkan_context,
@@ -25,8 +25,7 @@ void init_vulkan(Vulkan_Context& vulkan_context,
                  Command_Buffer_Context& command_buffer_context,
                  Semaphore_Fences_Context& semaphore_fences_context,
                  Texture& chip8_texture,
-                 Uniform_Buffer_Context& uniform_buffer_context,
-                 unsigned char* pixels,
+                 void const* pixels,
                  Descriptor& descriptor)
 {
 
@@ -49,20 +48,20 @@ void init_vulkan(Vulkan_Context& vulkan_context,
 
     /*texture creation*/
     // create_texture_image_pixels(vulkan_context, command_buffer_context, chip8_texture, pixels, window_info.WIDTH, window_info.HEIGHT);
-    // create_texture_image_view(vulkan_context, chip8_texture, VK_FORMAT_R8_UNORM /*VK_FORMAT_R8G8B8A8_SRGB*/);
-    create_texture_image_from_file(vulkan_context, command_buffer_context, chip8_texture, "../test_tex.jpg");
-    create_texture_image_view(vulkan_context, chip8_texture, VK_FORMAT_R8G8B8A8_SRGB);
+    create_texture_image_pixels(vulkan_context, command_buffer_context, chip8_texture, VK_FORMAT_R8_UNORM, pixels, VIDEO_WIDTH, VIDEO_HEIGHT);
+    create_texture_image_view(vulkan_context, chip8_texture, VK_FORMAT_R8_UNORM);
+    // create_texture_image_from_file(vulkan_context, command_buffer_context, chip8_texture, "../test_tex.jpg");
+    // create_texture_image_view(vulkan_context, chip8_texture, VK_FORMAT_R8G8B8A8_SRGB);
     create_texture_sampler(vulkan_context, chip8_texture);
 
     create_vertex_buffer_new(vulkan_context, command_buffer_context, buffer_context);
     create_index_buffer_new(vulkan_context, command_buffer_context, buffer_context);
 
-    create_uniform_buffer(vulkan_context, uniform_buffer_context, MAX_FRAMES_IN_FLIGHT);
 
 
     /* descriptor set for the shader*/
     create_descriptor_pool(vulkan_context, descriptor);
-    create_descriptor_sets(vulkan_context, chip8_texture, uniform_buffer_context, descriptor);
+    create_descriptor_sets(vulkan_context, chip8_texture, descriptor);
 
     command_buffer_allocate(vulkan_context, command_buffer_context, MAX_FRAMES_IN_FLIGHT);
     create_sync_objects(vulkan_context, semaphore_fences_context);
@@ -844,7 +843,7 @@ typedef struct VkPipelineShaderStageCreateInfo {
     // VK_POLYGON_MODE_LINE for wireframes, VK_POLYGON_MODE_POINT for just points, using these require gpu features
     rasterizer.lineWidth = 1.0f;
     rasterizer.cullMode = VK_CULL_MODE_BACK_BIT; //discard back facing triangles
-    rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+    rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE; // NOTE: not counter clockwise for some reason
     // counter means positive area is front facing, clockwise means negative area is front facing
     //MIGHT BE USEFUL FOR SHADOW MAPPING
     rasterizer.depthBiasEnable = VK_FALSE;
@@ -1268,7 +1267,6 @@ void record_command_buffer(Swapchain_Context& swapchain_context, Command_Buffer_
     viewport.minDepth = 0.0f;
     viewport.maxDepth = 1.0f;
     vkCmdSetViewport(command_buffer_context.command_buffer[current_frame], 0, 1, &viewport);
-
     VkRect2D scissor{};
     scissor.offset = {0, 0};
     scissor.extent = swapchain_context.surface_capabilities.currentExtent;
@@ -1281,7 +1279,7 @@ void record_command_buffer(Swapchain_Context& swapchain_context, Command_Buffer_
 
     //bind the vertex buffer
     //VkBuffer vertex_buffer[] = {buffer_context.vertex_buffer}; // IDK WHY THIS IS IN THE VULKAN TUTORIAL
-    VkDeviceSize offsets[] = {0};
+    VkDeviceSize offsets[] = {};
     vkCmdBindVertexBuffers(command_buffer_context.command_buffer[current_frame], 0, 1, &buffer_context.vertex_buffer, offsets);
 
     //bind index buffer, there can only ever be one index buffer, but you can have multiple vertex buffers
@@ -1388,11 +1386,12 @@ void cleanup(Vulkan_Context& vulkan_context, GLFW_Window_Context& window_info,
 
 void update_vertex_buffer_update(Vulkan_Context& vulkan_context, Command_Buffer_Context& command_buffer_context, Buffer_Context& buffer_context, VERTEX_DYNAMIC_INFO& vertex_info)
 {
+
     //TODO: so while not happening rn, we can use an offset to only copy the new data, instead of the whole buffer over
     //so instead of copy buffer we can use copy_buffer_region, which ill have to double check how it works
     if (!vertex_info.vertex_buffer_should_update) return;
 
-    // Only copy we are currently using vertices data
+    // Only copy what we are currently using vertices data
     VkDeviceSize current_vertex_data_size = sizeof(vertices[0]) * vertex_info.dynamic_vertices.size();
 
     //map and copy data

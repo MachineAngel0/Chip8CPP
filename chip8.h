@@ -31,6 +31,7 @@ typedef struct CHIP8
     unsigned short stack[16];
     unsigned short sp; // stack pointer
 
+    // unsigned char video[VIDEO_WIDTH * VIDEO_HEIGHT]; // 64*32 monochrome display size
     unsigned char video[VIDEO_WIDTH * VIDEO_HEIGHT]; // 64*32 monochrome display size
     unsigned char keypad[16]; // Chip 8 had 16 key inputs
     // Keypad       Keyboard
@@ -445,22 +446,45 @@ inline void OP_Dxyn(CHIP8* chip8)
         for (unsigned int col = 0; col < 8; ++col)
         {
             uint8_t spritePixel = spriteByte & (0x80u >> col);
-            uint32_t* screenPixel = (uint32_t *) &chip8->video[(yPos + row) * VIDEO_WIDTH + (xPos + col)];
+            uint8_t* screenPixel = &chip8->video[(yPos + row) * VIDEO_WIDTH + (xPos + col)];
 
             // Sprite pixel is on
             if (spritePixel)
             {
                 // Screen pixel also on - collision
-                if (*screenPixel == 0xFFFFFFFF)
+                if (*screenPixel == 1)
                 {
                     chip8->registers[0xF] = 1;
                 }
 
-                // Effectively XOR with the sprite pixel
-                *screenPixel ^= 0xFFFFFFFF;
+                // XOR with the sprite pixel
+                *screenPixel ^= 1;
             }
         }
     }
+
+    // uint8_t target_v_reg_x = (chip8->opcode & 0x0F00) >> 8;
+    // uint8_t target_v_reg_y = (chip8->opcode & 0x00F0) >> 4;
+    // uint8_t sprite_height = chip8->opcode & 0x000F;
+    // uint8_t x_location = chip8->registers[target_v_reg_x];
+    // uint8_t y_location = chip8->registers[target_v_reg_y];
+    // uint8_t pixel;
+    //
+    // // Reset collision register to FALSE
+    // chip8->registers[0xF] = 0;
+    // for (int y_coordinate = 0; y_coordinate < sprite_height; y_coordinate++) {
+    //     pixel = chip8->memory[chip8->index + y_coordinate];
+    //     for (int x_coordinate = 0; x_coordinate < 8; x_coordinate++) {
+    //         if ((pixel & (0x80 >> x_coordinate)) != 0) {
+    //             if (chip8->video[((y_location + y_coordinate) * VIDEO_WIDTH) +  (x_location + x_coordinate)] == 1) {
+    //                 chip8->registers[0xF] = 1;
+    //             }
+    //             chip8->video[((y_location + y_coordinate) * VIDEO_WIDTH) +  (x_location + x_coordinate)] ^= 1;
+    //         }
+    //     }
+    // }
+
+
 }
 
 inline void OP_Ex9E(CHIP8* chip8)
@@ -683,10 +707,8 @@ inline CHIP8* chip8_init()
     chip8->index = 0;
     chip8->sp = 0;
 
-    for (unsigned char & i : chip8->video)
-    {
-        i = 0;
-    }
+    //zero the display
+    memset(chip8->video, 0, sizeof(chip8->video));
 
     //load font into memory
     for (unsigned int i = 0; i < FONTSET_SIZE; i++)
@@ -741,6 +763,7 @@ inline bool chip8_load_rom(CHIP8* chip8, const char* filename)
 
 inline void chip8_cycle(CHIP8* chip8)
 {
+
     /***  Fetch Opcode ***/
     chip8->opcode = (chip8->memory[chip8->pc] << 8u) | chip8->memory[chip8->pc + 1];
     // Increment the PC before we execute anything
@@ -761,8 +784,10 @@ inline void chip8_cycle(CHIP8* chip8)
                     break;
                 case 0x00EE:
                     OP_00EE(chip8);
+                    break;
                 default:
                     printf("Unknown opcode 0x0: 0x%X\n", chip8->opcode);
+                    break;
             }
             break;
         case 0x1000: //1nnn
@@ -787,7 +812,7 @@ inline void chip8_cycle(CHIP8* chip8)
             OP_7xkk(chip8);
             break;
         case 0x8000:
-            switch (chip8->opcode & 0x00FF)
+            switch (chip8->opcode & 0x000F)
             {
                 case 0x0000:
                     OP_8xy0(chip8);
@@ -813,9 +838,15 @@ inline void chip8_cycle(CHIP8* chip8)
                 case 0x0007:
                     OP_8xy7(chip8);
                     break;
+                case 0x000E:
+                    OP_8xyE(chip8);
+                    break;
                 default:
-                    printf("Unknown opcode 0x8: 0x%X\n", chip8->opcode);;
+                    printf("Unknown opcode 0x8: 0x%X\n", chip8->opcode);
+                    break;
             }
+            break;
+
         case 0x9000:
             OP_9xy0(chip8);
             break;
@@ -842,6 +873,7 @@ inline void chip8_cycle(CHIP8* chip8)
                     break;
                 default:
                     printf("Unknown opcode E: 0x%X\n", chip8->opcode);
+                    break;
             }
             break;
         case 0xF000:
@@ -876,9 +908,12 @@ inline void chip8_cycle(CHIP8* chip8)
                     break;
                 default:
                     printf("Unknown opcode F: 0x%X\n", chip8->opcode);
+                    break;
             }
+            break;
         default:
             printf("Unknown opcode [0x0000]: 0x%X\n", chip8->opcode);
+            break;
     }
 
 
@@ -888,6 +923,7 @@ inline void chip8_cycle(CHIP8* chip8)
     // Decrement the delay timer if it's been set
     if (chip8->delay_timer > 0)
     {
+        //pre decrement
         --chip8->delay_timer;
     }
 

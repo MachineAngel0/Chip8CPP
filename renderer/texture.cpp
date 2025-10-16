@@ -1,4 +1,6 @@
 ﻿#include "texture.h"
+
+#include <algorithm>
 #include <stb_image.h>
 #include <stdexcept>
 #include <iostream>
@@ -6,13 +8,15 @@
 #include "vk_buffer.h"
 #include "vk_command_buffer.h"
 #include "vk_device.h"
+#include "../chip8.h"
 
 
 void create_texture_image_from_file(Vulkan_Context& vulkan_context, Command_Buffer_Context& command_buffer_context, Texture& texture, const char* filepath)
 {
+    // stbi_set_flip_vertically_on_load(true);
     //load the texture
     int texWidth, texHeight, texChannels;
-    stbi_uc* pixels = stbi_load("../test_tex.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+    stbi_uc* pixels = stbi_load(filepath, &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
     //The pixels are laid out row by row with 4 bytes per pixel in the case of STBI_rgb_alpha for a total of texWidth * texHeight * 4 values.
     VkDeviceSize imageSize = texWidth * texHeight * 4; // 4 stride rgba
 
@@ -52,7 +56,7 @@ void create_texture_image_from_file(Vulkan_Context& vulkan_context, Command_Buff
 }
 
 
-void create_texture_image_pixels(Vulkan_Context& vulkan_context, Command_Buffer_Context& command_buffer_context, Texture& texture, unsigned char* pixels, int texWidth, int texHeight)
+void create_texture_image_pixels(Vulkan_Context& vulkan_context, Command_Buffer_Context& command_buffer_context, Texture& texture, VkFormat format, void const* pixels, int texWidth, int texHeight)
 {
 
     if (!pixels)
@@ -60,10 +64,8 @@ void create_texture_image_pixels(Vulkan_Context& vulkan_context, Command_Buffer_
         throw std::runtime_error("INVALID PIXELS PASSED INTO TEXTURE");
     }
 
-
+    // VkDeviceSize imageSize = texWidth * texHeight;
     VkDeviceSize imageSize = texWidth * texHeight;
-
-
 
     //create a staging buffer
     VkBuffer stagingBuffer;
@@ -80,17 +82,55 @@ void create_texture_image_pixels(Vulkan_Context& vulkan_context, Command_Buffer_
 
 
     //create texture image
-    create_image(vulkan_context, texture, texWidth, texHeight, VK_FORMAT_R8_UNORM,
+    create_image(vulkan_context, texture, texWidth, texHeight, format,
                  VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
                  VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
     transition_image_layout(vulkan_context, command_buffer_context, texture.texture_image,
-                            VK_FORMAT_R8_UNORM, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+                            format, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
     copyBufferToImage(vulkan_context, command_buffer_context, stagingBuffer, texture.texture_image,
                       static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
     transition_image_layout(vulkan_context, command_buffer_context, texture.texture_image,
-                            VK_FORMAT_R8_UNORM, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                            format, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                             VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+}
+
+void update_texture_image_pixels(Vulkan_Context& vulkan_context, Command_Buffer_Context& command_buffer_context,
+    Texture& texture, VkFormat format, void const* pixels, int texWidth, int texHeight)
+{
+    if (!pixels)
+    {
+        throw std::runtime_error("INVALID PIXELS PASSED INTO TEXTURE");
+    }
+
+    VkDeviceSize imageSize = texWidth * texHeight;
+
+    // Create a staging buffer (temporary)
+    VkBuffer stagingBuffer;
+    VkDeviceMemory stagingBufferMemory;
+    buffer_create(vulkan_context, imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+                  VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                  stagingBuffer, stagingBufferMemory);
+
+    // Copy pixel data to staging buffer
+    void* data;
+    vkMapMemory(vulkan_context.logical_device, stagingBufferMemory, 0, imageSize, 0, &data);
+    memcpy(data, pixels, static_cast<size_t>(imageSize));
+    vkUnmapMemory(vulkan_context.logical_device, stagingBufferMemory);
+
+    //NOTE: just omits the create image part
+
+    transition_image_layout(vulkan_context, command_buffer_context, texture.texture_image,
+                             format, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+
+    copyBufferToImage(vulkan_context, command_buffer_context, stagingBuffer, texture.texture_image,
+                      static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
+
+    transition_image_layout(vulkan_context, command_buffer_context, texture.texture_image,
+                            format, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+
 }
 
 void create_image(Vulkan_Context& vulkan_context, Texture& texture, uint32_t width,

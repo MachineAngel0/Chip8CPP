@@ -94,8 +94,7 @@ void init_vulkan(Vulkan_Context& vulkan_context,
                  Command_Buffer_Context& command_buffer_context,
                  Semaphore_Fences_Context& semaphore_fences_context,
                  Texture& chip8_texture,
-                 Uniform_Buffer_Context& uniform_buffer_context,
-                 unsigned char* pixels,
+                 void const* pixels,
                  Descriptor& descriptor);
 
 
