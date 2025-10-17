@@ -1,28 +1,27 @@
 ﻿# Chip8 USING THE VULKAN GRAPHICS API
+
 - - - 
 
-A rewrote of my old chip8 emulator now using my own vulkan renderer instead of the sdl2 as it was previously. 
-I hope that someone can use this as an example, as there aren't many other examples of small vulkan projects on github to use as a learning resource.
+A rewrote of my old chip8 emulator now using my own vulkan renderer instead of the sdl2 as it was previously.
 
-![alt text](https://github.com/MachineAngel0/VulkanTetris/blob/master/Tetris_Image.png?raw=true "Tetris Image")
+I hope that someone can use this as an example, as there wasn't a single GitHub repository I could find also using vulkan for their Chip8 emulator
 
+![alt text](https://github.com/MachineAngel0/Chip8CPP/blob/master/Pong.png?raw=true "Pong Chip8 Screenshot") 
 
 ### BUILD:
+
     -cmake --build build --config Debug
-or
 
-    -cmake --build build --config Release
-- Alternatively you could go into the cmake-build-debug or cmake-build-release and launch the VulkanTetris.exe 
+### RUN (Command Line):
 
+    -Chip8CPP <ROM>
 
-### HOW TO PLAY:
-- A/D or Left/Right Arrow Keys to move the Tetris Piece 
-- W or Up Arrow Key to Rotate the Tetris Piece
-- Space Bar to force the tetromino to come down
+### NOTE:
 
-
-### NOTE: 
--The text will not scale properly if the window is resized
+-The emulator should be showing up in black and white but due to the way vulkan works and writes to textures, it uses an
+8-bit color channel that defaults to red or black.
+I couldn't find anything that would make the image become black and white even after looking through the vulkan
+documentation and messing with the color params. 
 
 
 
