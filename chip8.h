@@ -452,13 +452,13 @@ inline void OP_Dxyn(CHIP8* chip8)
             if (spritePixel)
             {
                 // Screen pixel also on - collision
-                if (*screenPixel == 1)
+                if (*screenPixel == 0xFFFFFFFF)
                 {
                     chip8->registers[0xF] = 1;
                 }
 
                 // XOR with the sprite pixel
-                *screenPixel ^= 1;
+                *screenPixel ^= 0xFFFFFFFF;
             }
         }
     }

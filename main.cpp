@@ -21,6 +21,8 @@ int main(int argc, char** argv)
     // {
        // throw std::runtime_error("ROM COULD NOT LOAD");
     // };
+
+    //TESTING ROMS:
     if (!chip8_load_rom(chip8, "../games/Tic-Tac-Toe [David Winter].ch8"))
     // if (!chip8_load_rom(chip8, "../games/test_opcode.ch8"))
     {
@@ -57,7 +59,7 @@ int main(int argc, char** argv)
     add_full_screen_quad_textured(vertex_info);
 
 
-    float cycle_time = SECONDS(0.01f);
+    float cycle_time = SECONDS(0.1f);
     float dt = 0.0f; // in ms
     float dt_accumulation = 0.0f; // in ms
 
@@ -68,6 +70,7 @@ int main(int argc, char** argv)
         dt = clock_window_delta_time();
         dt_accumulation += dt;
         // get input
+        key_callback(window_info.window, chip8);
 
         // draw_frame(vulkan_context, window_info, swapchain_context,
                              // graphics_context, command_buffer_context,
@@ -75,7 +78,6 @@ int main(int argc, char** argv)
 
         if (dt_accumulation > cycle_time)
         {
-            key_callback(window_info.window, chip8);
 
             //reset the timer
             dt_accumulation -= cycle_time;
