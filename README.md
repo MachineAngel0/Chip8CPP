@@ -2,7 +2,7 @@
 
 - - - 
 
-A rewrote of my old chip8 emulator now using my own vulkan renderer instead of the sdl2 as it was previously.
+A rewrite of my old chip8 emulator now using my own vulkan renderer instead of the sdl2 render.
 
 I hope that someone can use this as an example, as there wasn't a single GitHub repository I could find also using vulkan for their Chip8 emulator
 
@@ -21,7 +21,7 @@ I hope that someone can use this as an example, as there wasn't a single GitHub 
 -The emulator should be showing up in black and white but due to the way vulkan works and writes to textures, it uses an
 8-bit color channel that defaults to red or black.
 I couldn't find anything that would make the image become black and white even after looking through the vulkan
-documentation and messing with the color params. 
+documentation and messing with the color params. If you happen to know how to fix this I would love to hear about it.  
 
 
 
