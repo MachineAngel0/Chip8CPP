@@ -1279,7 +1279,7 @@ void record_command_buffer(Swapchain_Context& swapchain_context, Command_Buffer_
 
     //bind the vertex buffer
     //VkBuffer vertex_buffer[] = {buffer_context.vertex_buffer}; // IDK WHY THIS IS IN THE VULKAN TUTORIAL
-    VkDeviceSize offsets[] = {};
+    VkDeviceSize* offsets = nullptr;
     vkCmdBindVertexBuffers(command_buffer_context.command_buffer[current_frame], 0, 1, &buffer_context.vertex_buffer, offsets);
 
     //bind index buffer, there can only ever be one index buffer, but you can have multiple vertex buffers

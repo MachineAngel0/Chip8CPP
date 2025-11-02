@@ -1,0 +1,13 @@
+C:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build/CMakeFiles/Chip8CPP.dir
+C:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build/CMakeFiles/INSTALL.dir
+C:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build/CMakeFiles/ZERO_CHECK.dir
+C:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build/lib/glfw-3.4/CMakeFiles/uninstall.dir
+C:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build/lib/glfw-3.4/CMakeFiles/INSTALL.dir
+C:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build/lib/glfw-3.4/CMakeFiles/ALL_BUILD.dir
+C:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build/lib/glfw-3.4/src/CMakeFiles/glfw.dir
+C:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build/lib/glfw-3.4/src/CMakeFiles/update_mappings.dir
+C:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build/lib/glfw-3.4/src/CMakeFiles/INSTALL.dir
+C:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build/lib/glfw-3.4/docs/CMakeFiles/INSTALL.dir
+C:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build/lib/glm/CMakeFiles/INSTALL.dir
+C:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build/lib/glm/CMakeFiles/ALL_BUILD.dir

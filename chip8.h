@@ -745,7 +745,7 @@ inline bool chip8_load_rom(CHIP8* chip8, const char* filename)
 
         //read file into the buffer
         //buffer, size, count, file pointer
-        unsigned char buffer[rom_size];
+        unsigned char* buffer = (unsigned char*)malloc(rom_size);
 
         fread(&buffer, rom_size, 1, rom_file);
 
@@ -759,6 +759,7 @@ inline bool chip8_load_rom(CHIP8* chip8, const char* filename)
         }
         printf("LOADED ROM FILE SUCCESSFUL\n");
 
+        free(buffer);
         return true;
     }
 

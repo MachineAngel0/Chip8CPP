@@ -1,0 +1,13 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "Chip8CPP.dir\\Release\\clock.obj",
+            "outputs": [
+                "Chip8CPP.dir\\Release\\"
+            ],
+            "requires": []
+        }
+    ]
+}

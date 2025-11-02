@@ -1,0 +1,13 @@
+C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\main.cpp;C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\build\Chip8CPP.dir\Release\main.obj
+C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\input.cpp;C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\build\Chip8CPP.dir\Release\input.obj
+C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\renderer\Renderer.cpp;C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\build\Chip8CPP.dir\Release\Renderer.obj
+C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\renderer\Mesh.cpp;C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\build\Chip8CPP.dir\Release\Mesh.obj
+C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\renderer\texture.cpp;C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\build\Chip8CPP.dir\Release\texture.obj
+C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\renderer\vk_command_buffer.cpp;C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\build\Chip8CPP.dir\Release\vk_command_buffer.obj
+C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\renderer\vk_device.cpp;C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\build\Chip8CPP.dir\Release\vk_device.obj
+C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\renderer\vk_buffer.cpp;C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\build\Chip8CPP.dir\Release\vk_buffer.obj
+C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\renderer\vk_vertex.cpp;C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\build\Chip8CPP.dir\Release\vk_vertex.obj
+C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\renderer\vk_descriptor.cpp;C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\build\Chip8CPP.dir\Release\vk_descriptor.obj
+C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\renderer\vk_renderpass.cpp;C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\build\Chip8CPP.dir\Release\vk_renderpass.obj
+C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\renderer\clock.cpp;C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\build\Chip8CPP.dir\Release\clock.obj
+C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\lib\stb_impl.cpp;C:\Users\Adams Humbert\Documents\Clion\Chip8CPP\build\Chip8CPP.dir\Release\stb_impl.obj

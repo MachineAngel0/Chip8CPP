@@ -1,0 +1,10 @@
+^C:\USERS\ADAMS HUMBERT\DOCUMENTS\CLION\CHIP8CPP\BUILD\CMAKEFILES\FCAB910E8DFD3CDEED431EC4346C245A\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\cmake\bin\cmake.exe" "-SC:/Users/Adams Humbert/Documents/Clion/Chip8CPP" "-BC:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build/Chip8CPP.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

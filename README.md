@@ -12,12 +12,17 @@ I hope that someone can use this as an example, as there wasn't a single GitHub 
 ![alt text](https://github.com/MachineAngel0/Chip8CPP/blob/master/tetris.png?raw=true "Tetris Chip8 Screenshot")
 
 ### BUILD:
-
-    -cmake --build build --config Debug
+    
+    mkdir build
+    cd build
+    cmake ..
+    cd ../
+    cmake --build build --config Release
 
 ### RUN (Command Line):
-
-    -Chip8CPP <ROM>
+    
+    Go To ./build/Release
+    ./Chip8CPP <ROM>
 
 ### NOTE:
 

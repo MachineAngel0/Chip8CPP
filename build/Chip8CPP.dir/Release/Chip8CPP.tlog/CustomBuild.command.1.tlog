@@ -1,0 +1,10 @@
+^C:\USERS\ADAMS HUMBERT\DOCUMENTS\CLION\CHIP8CPP\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\cmake\bin\cmake.exe" "-SC:/Users/Adams Humbert/Documents/Clion/Chip8CPP" "-BC:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build" --check-stamp-file "C:/Users/Adams Humbert/Documents/Clion/Chip8CPP/build/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
