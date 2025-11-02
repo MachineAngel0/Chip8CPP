@@ -17,20 +17,20 @@ int main(int argc, char** argv)
 {
 
     CHIP8* chip8 = chip8_init();
-    // if (!chip8_load_rom(chip8, argv[1]))
-    // {
-    // std::cout << argv[1] << std::endl;
-       // throw std::runtime_error("ROM COULD NOT LOAD");
-    // };
+    if (!chip8_load_rom(chip8, argv[1]))
+    {
+        std::cout << argv[1] << std::endl;
+       throw std::runtime_error("ROM COULD NOT LOAD");
+    };
 
     //TESTING ROMS:
     // if (!chip8_load_rom(chip8, "../games/Tic-Tac-Toe [David Winter].ch8"))
     // if (!chip8_load_rom(chip8, "../games/Tetris [Fran Dachille, 1991].ch8"))
-    if (!chip8_load_rom(chip8, "../games/cave.ch8"))
+    // if (!chip8_load_rom(chip8, "../games/cave.ch8"))
     // if (!chip8_load_rom(chip8, "../games/test_opcode.ch8"))
-    {
-       throw std::runtime_error("ROM COULD NOT LOAD");
-    };
+    // {
+    //    throw std::runtime_error("ROM COULD NOT LOAD");
+    // };
 
 
     Vulkan_Context vulkan_context{};
