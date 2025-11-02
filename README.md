@@ -7,9 +7,9 @@ A rewrite of my old chip8 emulator now using my own vulkan renderer instead of t
 I hope that someone can use this as an example, as there wasn't a single GitHub repository I could find also using vulkan for their Chip8 emulator
 
 ![alt text](https://github.com/MachineAngel0/Chip8CPP/blob/master/Pong.png?raw=true "Pong Chip8 Screenshot") 
-![alt text](https://github.com/MachineAngel0/Chip8CPP/blob/master/Tetris.png?raw=true "Tetris Screenshot") 
-![alt text](https://github.com/MachineAngel0/Chip8CPP/blob/master/Pong.png?raw=true "Pong Chip8 Screenshot") 
-![alt text](https://github.com/MachineAngel0/Chip8CPP/blob/master/Pong.png?raw=true "Pong Chip8 Screenshot") 
+![alt text](https://github.com/MachineAngel0/Chip8CPP/blob/master/cave.png?raw=true "CAVE Chip8 Screenshot") 
+![alt text](https://github.com/MachineAngel0/Chip8CPP/blob/master/test.png?raw=true "TEST Chip8 Screenshot")
+![alt text](https://github.com/MachineAngel0/Chip8CPP/blob/master/tetris.png?raw=true "Tetris Chip8 Screenshot")
 
 ### BUILD:
 
