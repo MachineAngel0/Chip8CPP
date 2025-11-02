@@ -461,6 +461,7 @@ inline void OP_Dxyn(CHIP8* chip8)
         }
     }
 
+    //color conversion, so there are no inbetween values
     for (int i = 0; i < VIDEO_WIDTH*VIDEO_HEIGHT; i++) {
         chip8->video[i] = chip8->video[i] ? 255 : 0;
     }
