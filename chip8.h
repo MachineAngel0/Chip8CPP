@@ -208,7 +208,6 @@ inline void OP_5xy0(CHIP8* chip8)
     {
         chip8->pc += 2;
     }
-
 }
 
 inline void OP_6xkk(CHIP8* chip8)
@@ -244,7 +243,6 @@ inline void OP_8xy0(CHIP8* chip8)
     uint8_t Vy = (chip8->opcode & 0x00F0u) >> 4u;
 
     chip8->registers[Vx] = chip8->registers[Vy];
-
 }
 
 inline void OP_8xy1(CHIP8* chip8)
@@ -452,16 +450,21 @@ inline void OP_Dxyn(CHIP8* chip8)
             if (spritePixel)
             {
                 // Screen pixel also on - collision
-                if (*screenPixel == 0xFFFFFFFF)
+                if (*screenPixel == 0xFF)
                 {
                     chip8->registers[0xF] = 1;
                 }
 
                 // XOR with the sprite pixel
-                *screenPixel ^= 0xFFFFFFFF;
+                *screenPixel ^= 0xFF;
             }
         }
     }
+
+    for (int i = 0; i < VIDEO_WIDTH*VIDEO_HEIGHT; i++) {
+        chip8->video[i] = chip8->video[i] ? 255 : 0;
+    }
+
 
     // uint8_t target_v_reg_x = (chip8->opcode & 0x0F00) >> 8;
     // uint8_t target_v_reg_y = (chip8->opcode & 0x00F0) >> 4;
@@ -483,8 +486,6 @@ inline void OP_Dxyn(CHIP8* chip8)
     //         }
     //     }
     // }
-
-
 }
 
 inline void OP_Ex9E(CHIP8* chip8)
@@ -699,7 +700,7 @@ inline void OP_Fx65(CHIP8* chip8)
 inline CHIP8* chip8_init()
 {
     // Initialize registers and memory once
-    CHIP8* chip8 = (CHIP8*)malloc(sizeof(CHIP8));
+    CHIP8* chip8 = (CHIP8 *) malloc(sizeof(CHIP8));
 
     //init program counter
     chip8->pc = START_ADDRESS;
@@ -716,6 +717,11 @@ inline CHIP8* chip8_init()
         chip8->memory[FONTSET_START_ADDRESS + i] = fontset[i];
     }
     return chip8;
+}
+
+inline void chip8_free(CHIP8* chip8)
+{
+    free(chip8);
 }
 
 inline bool chip8_load_rom(CHIP8* chip8, const char* filename)
@@ -763,7 +769,6 @@ inline bool chip8_load_rom(CHIP8* chip8, const char* filename)
 
 inline void chip8_cycle(CHIP8* chip8)
 {
-
     /***  Fetch Opcode ***/
     chip8->opcode = (chip8->memory[chip8->pc] << 8u) | chip8->memory[chip8->pc + 1];
     // Increment the PC before we execute anything

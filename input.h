@@ -31,6 +31,13 @@ inline bool space_key_pressed = false;
 
 inline void key_callback(GLFWwindow* window, CHIP8* chip8)
 {
+
+    // Clear all keys
+    for (int i = 0; i < 16; i++)
+    {
+        chip8->keypad[i] = 0;
+    }
+
     //here for testing
     if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
     {

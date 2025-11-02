@@ -23,7 +23,8 @@ int main(int argc, char** argv)
     // };
 
     //TESTING ROMS:
-    if (!chip8_load_rom(chip8, "../games/Tic-Tac-Toe [David Winter].ch8"))
+    // if (!chip8_load_rom(chip8, "../games/Tic-Tac-Toe [David Winter].ch8"))
+    if (!chip8_load_rom(chip8, "../games/Tetris [Fran Dachille, 1991].ch8"))
     // if (!chip8_load_rom(chip8, "../games/test_opcode.ch8"))
     {
        throw std::runtime_error("ROM COULD NOT LOAD");
@@ -59,7 +60,7 @@ int main(int argc, char** argv)
     add_full_screen_quad_textured(vertex_info);
 
 
-    float cycle_time = SECONDS(0.1f);
+    float cycle_time = SECONDS(0.01f);
     float dt = 0.0f; // in ms
     float dt_accumulation = 0.0f; // in ms
 
@@ -86,9 +87,6 @@ int main(int argc, char** argv)
             chip8_cycle(chip8);
 
 
-            for (int i = 0; i < VIDEO_WIDTH*VIDEO_HEIGHT; i++) {
-                chip8->video[i] = chip8->video[i] ? 255 : 0;
-            }
 
             update_texture_image_pixels(vulkan_context, command_buffer_context, texture, VK_FORMAT_R8_UNORM, chip8->video, VIDEO_WIDTH, VIDEO_HEIGHT);
 
@@ -100,6 +98,7 @@ int main(int argc, char** argv)
         buffer_context, vertex_info, semaphore_fences_context, descriptor_set);
     }
 
-    printf("Hello, World!\n");
+
+    chip8_free(chip8);
     return 0;
 }
